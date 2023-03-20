@@ -7,10 +7,143 @@
 #include "functions.h"
 #include "structure.h"
 
+#define CORRECT_INPUT 2
+#define END_STRING '\n'
+#define BACKSPACE_KEY 8
+#define START_CHAR_RANGE 32
+#define END_CHAR_RANGE 126
 #define MAX_LEN 100 // фиксированная длина записей
 #define FILE_NAME "data.bin" // имя файла с данными
 
+int CheckingInput(int lowerBound, int count)
+{
+    int userInput = 1;
+    char inputChar = '\0';
 
+    int input = scanf("%d%c", &userInput, &inputChar);
+
+    if (count)
+    {
+        while (input != CORRECT_INPUT || inputChar != END_STRING
+               || userInput < lowerBound || userInput > count)
+        {
+            if (userInput >= lowerBound && userInput <= count)
+            {
+                while ((inputChar = getchar()) != '\n');
+            }
+            userInput = 1;
+            printf("Неверный ввод. Попробуйте снова.\nВведите номер: ");
+            input = scanf("%d%c", &userInput, &inputChar);
+        }
+    }
+    else
+    {
+        while (input != CORRECT_INPUT || inputChar != END_STRING
+               || userInput <= lowerBound)
+        {
+            if (userInput > lowerBound)
+            {
+                while ((inputChar = getchar()) != '\n');
+            }
+            userInput = 1;
+            printf("Неверный ввод. Попробуйте снова.\nВведите номер: ");
+            input = scanf("%d%c", &userInput, &inputChar);
+        }
+    }
+    return userInput;
+}
+
+char* StringInput(void)
+{
+    char* userStr = (char*)malloc(1 * sizeof(char));
+    userStr[0] = '\0';
+    char curChar = 0;
+    int curSize = 1;
+
+    while(curChar != '\n')
+    {
+        curChar = getchar();
+
+        int deltaVal = 0; // Определяет, на сколько изменится длина массива
+        int lengthDif = 0;
+
+        // Если мы стираем символы, а не пишем их,
+        if (curChar == BACKSPACE_KEY)
+        {
+            deltaVal = -1; // то будем уменьшать длину массива
+            lengthDif = 1; // и копировать строку до предпоследнего символа
+        }
+
+            // Иначе проверяем, входит ли введённый символ в диапазон печатных
+        else
+        {
+            if (curChar >= START_CHAR_RANGE && curChar <= END_CHAR_RANGE)
+            {
+                deltaVal = 1; // Если да, то будем увеличивать длину на 1
+                lengthDif = 2; // Не заполняем последние 2 символа -
+                // оставляем место для введённого символа и \0
+            }
+            else
+            {
+                continue; // Если это не печатный символ, то пропускаем его
+            }
+        }
+
+        // Если стирать больше нечего, но пользователь
+        // всё равно жмёт Backspace.
+        int newSize = curSize + deltaVal;
+        if (newSize == 0)
+        {
+            continue; // то мы переходим на следующую итерацию - ждём '\n'
+        }
+
+        char* tmpStr = (char*)malloc(newSize * sizeof(char));
+        if (tmpStr) // Проверяем, выделилась ли память
+        {
+            // Идём до предпоследнего символа, т.к. надо в конец записать '\0'
+            for (int i = 0;
+                 i < newSize - lengthDif;
+                 ++i)
+            {
+                tmpStr[i] = userStr[i];
+            }
+
+            if (curChar != BACKSPACE_KEY) // Если введён печатный символ,
+            {
+                tmpStr[newSize - 2] = curChar; // Добавляем его в строку
+                tmpStr[newSize - 1] = '\0';
+            }
+            free(userStr);
+            userStr = tmpStr;
+            curSize = newSize;
+        }
+        else
+        {
+            printf("Не могу выделить память под обновлённую строку!");
+            break;
+        }
+    }
+
+    return userStr;
+}
+
+float FloatInput(void)
+{
+    float number = 0;
+    while (number == 0 || number < 0)
+    {
+        char* InputValue = StringInput();
+        number = strtof(InputValue, NULL);
+
+        if (number == 0 || number < 0)
+        {
+            printf("Неверный ввод. Попробуйте снова.\n"
+                   "Повторите ввод: ");
+        }
+        free(InputValue);
+    }
+    return number;
+}
 
 // функция для добавления одной записи в файл
 void add_record() {

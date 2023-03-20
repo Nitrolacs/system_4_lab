@@ -1,48 +1,71 @@
+/*! Код основного процесса программы */
+
 #include <stdio.h>
 
 #include "interface.h"
 #include "functions.h"
 
-// основная функция программы
-int main() {
-    int choice; // переменная для хранения выбора пользователя
-    int exit = 0; // флаг выхода из программы
+#define ADDING_ENTERPRISE 1
+#define CHANGING_ENTERPRISE 2
+#define DELETING_ENTERPRISE 3
+#define PRINTING_ONE_ENTERPRISE 4
+#define PRINTING_ALL_ENTERPRISES 5
+#define ENTERPRISES_WITH_BEST_VALUE 6
+#define PRICE_RANGE 7
+#define EXIT 8
 
-    while (!exit) { // цикл пока флаг не установлен
-        PrintMenu(); // вызвать функцию для вывода меню
-        printf("Введите ваш выбор: ");
-        scanf("%d", &choice); // считать выбор пользователя
+int main()
+{
+    printf("----------------------------------\n");
+    printf("| Программа для работы с файлами |\n");
+    printf("----------------------------------\n");
 
-        switch (choice) { // оператор выбора в зависимости от введенного значения
-            case 1: // если пользователь выбрал 1
-                add_record(); // вызвать функцию для добавления записи в файл
+    int userChoice;
+
+    do
+    {
+        PrintMenu(); // выводим меню на экран
+        int menuItemsCount = 8; // кол-во пунктов меню
+        // нижняя граница допустимых значений
+        int lowerBound = 1;
+        // получаем номер выбранного пункта меню
+        printf("Введите номер пункта: ");
+        userChoice = CheckingInput(lowerBound, menuItemsCount);
+
+        switch (userChoice)
+        {
+            case ADDING_ENTERPRISE:
+                add_record();
                 break;
-            case 2: // если пользователь выбрал 2
+
+            case CHANGING_ENTERPRISE:
                 modify_record();
                 break;
-            case 3: // если пользователь выбрал 3
-                delete_record(); // вызвать функцию для удаления записи из файла
+
+            case DELETING_ENTERPRISE:
+                delete_record();
                 break;
-            case 4: // если пользователь выбрал 4
+
+            case PRINTING_ONE_ENTERPRISE:
                 read_record();
                 break;
-            case 5: // если пользователь выбрал 5
-                print_all_records(); // вызвать функцию для вывода всех записей из файла
+
+            case PRINTING_ALL_ENTERPRISES:
+                print_all_records();
                 break;
-            case 6: // если пользователь выбрал 6
+
+            case ENTERPRISES_WITH_BEST_VALUE:
 
                 break;
-            case 7: /// если пользователь выбрал 7
+
+            case PRICE_RANGE:
 
                 break;
-            case 8: // если пользователь выбрал 8
-                exit = 1; // установить флаг выхода из программы
-                printf("Спасибо за использование программы. До свидания!\n");
-                break;
-            default: // если пользователь ввел некорректное значение
-                printf("Неверный ввод. Попробуйте еще раз.\n");
-                break;
+
+            default:
+                printf("Выход...\n");
         }
-    }
-    return 0; // вернуть ноль как код успешного завершения программы
+    } while (userChoice != EXIT);
+
+    return 0;
 }
