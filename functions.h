@@ -15,12 +15,13 @@ void AddEnterprise();
 
 void modify_record();
 
+long CountRecords(char* fileName);
+
 void delete_record();
 
 void read_record();
 
 void PrintAllRecords();
-
 
 
 #endif //INC_4_LAB_FUNCTIONS_H

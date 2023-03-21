@@ -151,6 +151,7 @@ void AddEnterprise() {
     Enterprise tmpEnterprise; // Cтруктура для хранения данных о продукте.
     struct iovec iov[4]; // Массив структур iovec для векторной записи
     char fileName[MAX_LEN];
+    long count; // Переменная для хранения количества записей
 
     printf("Введите название предприятия-изготовителя: ");
     scanf("%s", tmpEnterprise.company);
@@ -327,6 +328,43 @@ void modify_record() {
     printf("Запись успешно модифицирована.\n");
 }
 
+long CountRecords(char* fileName)
+{
+    long count; // Переменная для хранения количества записей
+
+    int fileDescriptor = -1;
+
+    fileDescriptor = open(fileName, O_RDONLY);
+    // открыть файл для чтения
+
+    if (fileDescriptor == -1) {
+        perror("Ошибка открытия файла");
+        exit(1);
+    }
+
+    long len; // Переменная для хранения размера файла
+
+    len = lseek(fileDescriptor, 0L, SEEK_END);
+    // переместить указатель в конец файла и получить его позицию
+
+    if (len == -1) {
+        perror("Ошибка перемещения по файлу");
+        exit(1);
+    }
+
+    close(fileDescriptor);
+
+    long m; // Переменная для хранения размера одной записи
+
+    m = sizeof(Enterprise);
+    // вычислить размер одной записи как сумму размеров всех полей структуры
+
+    count = len / m;
+    // поделить размер файла на размер одной записи
+
+    return count;
+}
+
 // функция для удаления одной записи из файла по номеру
 void delete_record() {
     int n; // номер записи для удаления
@@ -472,9 +510,13 @@ void PrintAllRecords() {
         }
     }
 
+    long test = CountRecords(fileName);
+    printf("Количество записей в файле: %ld\n", test); // вывести результат
+
     if (fileOpen == 0)
     {
-        while (1) { // бесконечный цикл
+        while (1)
+        { // бесконечный цикл
 
             iov[0].iov_base = tmpEnterprise.company; // указатель на данные о предприятие-изготовителе
             iov[0].iov_len = MAX_LEN; // размер данных о предприяте-изготовителе в байтах
@@ -485,14 +527,14 @@ void PrintAllRecords() {
             iov[3].iov_base = &tmpEnterprise.performance; // указатель на данные о производительности
             iov[3].iov_len = sizeof(double); // размер данных о производительности в байтах
 
-            ssize_t bytes_read = readv(fileDescriptor, iov, 4); // выполнить векторное чтение из файла в массив структур iovec и сохранить количество прочитанных байтов
+            ssize_t bytesRead = readv(fileDescriptor, iov, 4); // выполнить векторное чтение из файла в массив структур iovec и сохранить количество прочитанных байтов
 
-            if (bytes_read == -1) { // проверить успешность операции чтения
+            if (bytesRead == -1) { // проверить успешность операции чтения
                 perror("Ошибка чтения из файла");
                 exit(1);
             }
 
-            if (bytes_read == 0) { // проверить конец файла
+            if (bytesRead == 0) { // проверить конец файла
                 break;
             }
 
