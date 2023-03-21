@@ -23,5 +23,6 @@ void ReadRecord();
 
 void PrintAllRecords();
 
+void FindBestRatio();
 
 #endif //INC_4_LAB_FUNCTIONS_H
