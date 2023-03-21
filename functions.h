@@ -25,4 +25,6 @@ void PrintAllRecords();
 
 void FindBestRatio();
 
+void FindPriceRange();
+
 #endif //INC_4_LAB_FUNCTIONS_H

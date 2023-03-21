@@ -60,7 +60,7 @@ int main()
                 break;
 
             case PRICE_RANGE:
-
+                FindPriceRange();
                 break;
 
             default:

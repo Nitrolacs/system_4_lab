@@ -613,7 +613,6 @@ void FindBestRatio()
 {
     Enterprise tmpEnterprise; // структура для хранения данных о продукте
     struct iovec iov[4]; // массив структур iovec для векторного чтения
-    int count = 0; // счетчик записей
     int fileDescriptor = -1;
     char fileName[MAX_LEN];
     int fileOpen = 0;
@@ -711,6 +710,84 @@ void FindBestRatio()
             }
         }
         close(fileDescriptor); // закрыть файл
+    }
+}
+
+void FindPriceRange()
+{
+    double minPrice = 0.0; // Минимальная цена
+    double maxPrice = 0.0; // Максимальная цена
+    Enterprise tmpEnterprise; // структура для хранения данных о продукте
+    struct iovec iov[4]; // массив структур iovec для векторного чтения
+    int fileDescriptor = -1;
+    char fileName[MAX_LEN];
+    int fileOpen = 0;
+
+    double bestRatio = 0.0; // Лучшее соотношение
+
+    while (fileDescriptor == -1)
+    {
+        printf("Введите имя файла (Q - для выхода): ");
+        scanf("%s", fileName);
+
+        int len = strlen(fileName); // получить длину имени файла
+        char* ext = fileName + len - 4; // получить указатель на последние четыре символа
+
+        if (strcmp(ext, ".txt") == 0 || strcmp(ext, ".bin") == 0) // сравнить расширение с ".txt" или ".bin"
+        {
+            fileDescriptor = open(fileName, O_RDONLY); // открыть файл для чтения
+            if (fileDescriptor == -1)
+            {
+                printf("Такого файла нет! Попробуйте снова.\n");
+            }
+        }
+        else
+        {
+            if (strcmp(fileName, "Q") == 0)
+            {
+                fileOpen = -1;
+                break;
+            }
+            printf("Неверное расширение файла! Попробуйте снова\n");
+        }
+    }
+
+    if (fileOpen == 0)
+    {
+        while (1)
+        { // бесконечный цикл
+            iov[0].iov_base = tmpEnterprise.company; // указатель на данные о предприятие-изготовителе
+            iov[0].iov_len = MAX_LEN; // размер данных о предприяте-изготовителе в байтах
+            iov[1].iov_base = tmpEnterprise.type; // указатель на данные о типе
+            iov[1].iov_len = MAX_LEN; // размер данных о типе в байтах
+            iov[2].iov_base = &tmpEnterprise.price; // указатель на данные о цене
+            iov[2].iov_len = sizeof(double); // размер данных о цене в байтах
+            iov[3].iov_base = &tmpEnterprise.performance; // указатель на данные о производительности
+            iov[3].iov_len = sizeof(double); // размер данных о производительности в байтах
+            ssize_t bytesRead = readv(fileDescriptor, iov, 4); // выполнить векторное чтение из файла в массив структур iovec и сохранить количество прочитанных байтов
+            if (bytesRead == -1) { // проверить успешность операции чтения
+                perror("Ошибка чтения из файла");
+                exit(1);
+            }
+            if (bytesRead == 0) { // проверить конец файла
+                break;
+            }
+
+            double price = tmpEnterprise.price;
+            if (price < minPrice ||
+                minPrice == 0.0)
+            {
+                minPrice = price;
+            }
+            if (price > maxPrice ||
+                maxPrice == 0.0)
+            {
+                maxPrice = price;
+            }
+        }
+        close(fileDescriptor); // закрыть файл
+
+        printf("Диапазон цен от %.2f до %.2f\n", minPrice, maxPrice);
     }
 }
 
