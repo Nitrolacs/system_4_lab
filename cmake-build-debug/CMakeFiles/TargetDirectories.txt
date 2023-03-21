@@ -1,3 +1,3 @@
-/media/sf_VM_EXCHANGE/system_programming/4_lab/cmake-build-debug/CMakeFiles/4_lab.dir
-/media/sf_VM_EXCHANGE/system_programming/4_lab/cmake-build-debug/CMakeFiles/edit_cache.dir
-/media/sf_VM_EXCHANGE/system_programming/4_lab/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/stud/Документы/4_lab/cmake-build-debug/CMakeFiles/4_lab.dir
+/home/stud/Документы/4_lab/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/stud/Документы/4_lab/cmake-build-debug/CMakeFiles/rebuild_cache.dir

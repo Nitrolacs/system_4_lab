@@ -11,7 +11,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/media/sf_VM_EXCHANGE/system_programming/4_lab/cmake-build-debug"
+			"value" : "/home/stud/\u0414\u043e\u043a\u0443\u043c\u0435\u043d\u0442\u044b/4_lab/cmake-build-debug"
 		},
 		{
 			"name" : "4_lab_IS_TOP_LEVEL",
@@ -35,7 +35,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/media/sf_VM_EXCHANGE/system_programming/4_lab"
+			"value" : "/home/stud/\u0414\u043e\u043a\u0443\u043c\u0435\u043d\u0442\u044b/4_lab"
 		},
 		{
 			"name" : "CMAKE_ADDR2LINE",
@@ -91,7 +91,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "/media/sf_VM_EXCHANGE/system_programming/4_lab/cmake-build-debug"
+			"value" : "/home/stud/\u0414\u043e\u043a\u0443\u043c\u0435\u043d\u0442\u044b/4_lab/cmake-build-debug"
 		},
 		{
 			"name" : "CMAKE_CACHE_MAJOR_VERSION",
@@ -451,7 +451,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/media/sf_VM_EXCHANGE/system_programming/4_lab/cmake-build-debug/CMakeFiles/pkgRedirects"
+			"value" : "/home/stud/\u0414\u043e\u043a\u0443\u043c\u0435\u043d\u0442\u044b/4_lab/cmake-build-debug/CMakeFiles/pkgRedirects"
 		},
 		{
 			"name" : "CMAKE_GENERATOR",
@@ -511,7 +511,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "/media/sf_VM_EXCHANGE/system_programming/4_lab"
+			"value" : "/home/stud/\u0414\u043e\u043a\u0443\u043c\u0435\u043d\u0442\u044b/4_lab"
 		},
 		{
 			"name" : "CMAKE_INSTALL_PREFIX",

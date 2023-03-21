@@ -663,7 +663,7 @@ void FindBestRatio()
                 printf("Файл пустой.\n");
                 fileOpen = -1;
             }
-            
+
             if (fileDescriptor == -1)
             {
                 printf("Такого файла нет! Попробуйте снова.\n");
@@ -770,6 +770,15 @@ void FindPriceRange()
         if (strcmp(ext, ".txt") == 0 || strcmp(ext, ".bin") == 0) // сравнить расширение с ".txt" или ".bin"
         {
             fileDescriptor = open(fileName, O_RDONLY); // открыть файл для чтения
+
+            long tmpCount = CountRecords(fileName);
+
+            if (tmpCount == 0)
+            {
+                printf("Файл пустой.\n");
+                fileOpen = -1;
+            }
+
             if (fileDescriptor == -1)
             {
                 printf("Такого файла нет! Попробуйте снова.\n");
