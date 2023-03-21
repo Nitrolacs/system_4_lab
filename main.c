@@ -40,7 +40,7 @@ int main()
                 break;
 
             case CHANGING_ENTERPRISE:
-                modify_record();
+                ModifyRecord();
                 break;
 
             case DELETING_ENTERPRISE:

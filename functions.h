@@ -13,7 +13,7 @@ float FloatInput(void);
 
 void AddRecord();
 
-void modify_record();
+void ModifyRecord();
 
 long CountRecords(char* fileName);
 
