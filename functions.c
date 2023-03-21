@@ -147,7 +147,7 @@ float FloatInput(void)
 }
 
 // функция для добавления одной записи в файл
-void AddEnterprise() {
+void AddRecord() {
     Enterprise tmpEnterprise; // Cтруктура для хранения данных о продукте.
     struct iovec iov[4]; // Массив структур iovec для векторной записи
     char fileName[MAX_LEN];
@@ -331,99 +331,95 @@ void modify_record() {
 long CountRecords(char* fileName)
 {
     long count; // Переменная для хранения количества записей
-
     int fileDescriptor = -1;
-
     fileDescriptor = open(fileName, O_RDONLY);
-    // открыть файл для чтения
-
-    if (fileDescriptor == -1) {
-        perror("Ошибка открытия файла");
-        exit(1);
-    }
-
-    long len; // Переменная для хранения размера файла
-
-    len = lseek(fileDescriptor, 0L, SEEK_END);
-    // переместить указатель в конец файла и получить его позицию
-
-    if (len == -1) {
-        perror("Ошибка перемещения по файлу");
-        exit(1);
-    }
-
+    count = lseek(fileDescriptor,0,SEEK_END)/(MAX_LEN *2 + sizeof(double)*2);
     close(fileDescriptor);
-
-    long m; // Переменная для хранения размера одной записи
-
-    m = sizeof(Enterprise);
-    // вычислить размер одной записи как сумму размеров всех полей структуры
-
-    count = len / m;
-    // поделить размер файла на размер одной записи
-
     return count;
 }
 
 // функция для удаления одной записи из файла по номеру
-void delete_record() {
-    int n; // номер записи для удаления
-    int count; // количество записей в файле
+void DeleteRecord()
+{
+    int number; // номер записи для удаления
+    long count; // количество записей в файле
     char buffer[MAX_LEN * 2 + sizeof(double) * 2]; // буфер для хранения данных о продукте
     struct iovec iov[1]; // массив структур iovec для векторной чтения/записи
-    printf("Введите номер записи для удаления: ");
-    scanf("%d", &n);
-    if (n < 1) { // проверить корректность номера записи
-        printf("Неверный номер записи.\n");
-        return;
-    }
-    int fd = open(FILE_NAME, O_RDWR); // открыть файл для чтения и записи
-    if (fd == -1) { // проверить успешность открытия файла
-        perror("Ошибка открытия файла");
-        exit(1);
-    }
 
-    count = lseek(fd,0,SEEK_END)/(MAX_LEN *2 + sizeof(double)*2); // определить количество записей в файле
+    int fileOpen = 0;
+    int fileDescriptor = -1;
+    char fileName[MAX_LEN];
 
-    if (n > count) { // проверить корректность номера записи
-        printf("Неверный номер записи.\n");
-        return;
-    }
+    while (fileDescriptor == -1)
+    {
+        printf("Введите имя файла (Q - для выхода): ");
+        scanf("%s", fileName);
 
-    for(int i=n;i<count;i++) { // цикл по всем последующим записям
+        int len = strlen(fileName); // получить длину имени файла
+        char* ext = fileName + len - 4; // получить указатель на последние четыре символа
 
-        if (lseek(fd,i*(MAX_LEN*2+sizeof(double)*2),SEEK_SET)==-1){ // переместить указатель позиции в файле на начало текущей записи и проверить успешность операции
-            perror("Ошибка перемещения в файле");
-            exit(1);
+        if (strcmp(ext, ".txt") == 0 || strcmp(ext, ".bin") == 0) // сравнить расширение с ".txt" или ".bin"
+        {
+            fileDescriptor = open(fileName, O_RDWR); // открыть файл для чтения и записи
+            if (fileDescriptor == -1)
+            {
+                printf("Такого файла нет! Попробуйте снова.\n");
+            }
         }
-
-        iov[0].iov_base = buffer; // указатель на данные в буфере
-        iov[0].iov_len = MAX_LEN*2+sizeof(double)*2; // размер данных в буфере в байтах
-
-        if(readv(fd,iov,1)==-1){ // выполнить векторное чтение из файла в массив структур iovec и проверить успешность операции
-            perror("Ошибка чтения из файла");
-            exit(1);
-        }
-
-        if(lseek(fd,(i-1)*(MAX_LEN*2+sizeof(double)*2),SEEK_SET)==-1){ // переместить указатель позиции в файле на начало предыдущей позиции и проверить успешность операции
-            perror("Ошибка перемещения в файле");
-            exit(1);
-        }
-
-        if(writev(fd,iov,1)==-1){ // выполнить векторную запись из массива структур iovec в файл и проверить успешность операции
-            perror("Ошибка записи в файл");
-            exit(1);
+        else
+        {
+            if (strcmp(fileName, "Q") == 0)
+            {
+                fileOpen = -1;
+                break;
+            }
+            printf("Неверное расширение файла! Попробуйте снова\n");
         }
     }
 
-    if(ftruncate(fd,(count-1)*(MAX_LEN*2+sizeof(double)*2))==-1){ // уменьшить размер файла на одну запись и проверить успешность операции
-        perror("Ошибка изменения размера файла");
-        exit(1);
+    if (fileOpen == 0)
+    {
+        count = CountRecords(fileName);
+
+        printf("Всего в файле %ld предприятий/я.\n", count);
+        printf("Введите номер предприятия, которое вы хотите удалить: ");
+        number = CheckingInput(1, count); // номер записи для чтения
+
+        for(int i=number;i<count;i++) { // цикл по всем последующим записям
+
+            if (lseek(fileDescriptor,i*(MAX_LEN*2+sizeof(double)*2),SEEK_SET)==-1){ // переместить указатель позиции в файле на начало текущей записи и проверить успешность операции
+                perror("Ошибка перемещения в файле");
+                exit(1);
+            }
+
+            iov[0].iov_base = buffer; // указатель на данные в буфере
+            iov[0].iov_len = MAX_LEN*2+sizeof(double)*2; // размер данных в буфере в байтах
+
+            if(readv(fileDescriptor,iov,1)==-1){ // выполнить векторное чтение из файла в массив структур iovec и проверить успешность операции
+                perror("Ошибка чтения из файла");
+                exit(1);
+            }
+
+            if(lseek(fileDescriptor,(i-1)*(MAX_LEN*2+sizeof(double)*2),SEEK_SET)==-1){ // переместить указатель позиции в файле на начало предыдущей позиции и проверить успешность операции
+                perror("Ошибка перемещения в файле");
+                exit(1);
+            }
+
+            if(writev(fileDescriptor,iov,1)==-1){ // выполнить векторную запись из массива структур iovec в файл и проверить успешность операции
+                perror("Ошибка записи в файл");
+                exit(1);
+            }
+        }
+
+        if(ftruncate(fileDescriptor,(count-1)*(MAX_LEN*2+sizeof(double)*2))==-1){ // уменьшить размер файла на одну запись и проверить успешность операции
+            perror("Ошибка изменения размера файла");
+            exit(1);
+        }
+
+        close(fileDescriptor); // закрыть файл
+
+        printf("Запись успешно удалена.\n");
     }
-
-    close(fd); // закрыть файл
-
-    printf("Запись успешно удалена.\n");
 }
 
 // функция для чтения одной записи из файла по номеру
@@ -467,7 +463,7 @@ void ReadRecord()
     {
         long count = CountRecords(fileName);
 
-        printf("Всего в файле %ld предприятий.\n", count);
+        printf("Всего в файле %ld предприятий/я.\n", count);
         printf("Введите номер предприятия: ");
         int number = CheckingInput(1, count); // номер записи для чтения
 

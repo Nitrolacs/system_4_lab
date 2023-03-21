@@ -36,7 +36,7 @@ int main()
         switch (userChoice)
         {
             case ADDING_ENTERPRISE:
-                AddEnterprise();
+                AddRecord();
                 break;
 
             case CHANGING_ENTERPRISE:
@@ -44,7 +44,7 @@ int main()
                 break;
 
             case DELETING_ENTERPRISE:
-                delete_record();
+                DeleteRecord();
                 break;
 
             case PRINTING_ONE_ENTERPRISE:

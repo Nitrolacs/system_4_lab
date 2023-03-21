@@ -11,13 +11,13 @@ char* StringInput(void);
 
 float FloatInput(void);
 
-void AddEnterprise();
+void AddRecord();
 
 void modify_record();
 
 long CountRecords(char* fileName);
 
-void delete_record();
+void DeleteRecord();
 
 void ReadRecord();
 
