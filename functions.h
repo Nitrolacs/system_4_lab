@@ -11,7 +11,7 @@ char* StringInput(void);
 
 float FloatInput(void);
 
-void add_record();
+void AddEnterprise();
 
 void modify_record();
 
@@ -19,7 +19,7 @@ void delete_record();
 
 void read_record();
 
-void print_all_records();
+void PrintAllRecords();
 
 
 

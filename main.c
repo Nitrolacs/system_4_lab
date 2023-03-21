@@ -5,6 +5,7 @@
 #include "interface.h"
 #include "functions.h"
 
+#define MAX_LEN 100
 #define ADDING_ENTERPRISE 1
 #define CHANGING_ENTERPRISE 2
 #define DELETING_ENTERPRISE 3
@@ -35,7 +36,7 @@ int main()
         switch (userChoice)
         {
             case ADDING_ENTERPRISE:
-                add_record();
+                AddEnterprise();
                 break;
 
             case CHANGING_ENTERPRISE:
@@ -51,7 +52,7 @@ int main()
                 break;
 
             case PRINTING_ALL_ENTERPRISES:
-                print_all_records();
+                PrintAllRecords();
                 break;
 
             case ENTERPRISES_WITH_BEST_VALUE:

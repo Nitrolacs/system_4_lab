@@ -3,6 +3,7 @@
 #include <sys/uio.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <string.h>
 
 #include "functions.h"
 #include "structure.h"
@@ -13,7 +14,7 @@
 #define START_CHAR_RANGE 32
 #define END_CHAR_RANGE 126
 #define MAX_LEN 100 // фиксированная длина записей
-#define FILE_NAME "data.bin" // имя файла с данными
+#define FILE_NAME "data.bin"
 
 int CheckingInput(int lowerBound, int count)
 {
@@ -146,41 +147,58 @@ float FloatInput(void)
 }
 
 // функция для добавления одной записи в файл
-void add_record() {
-    Enterprise p; // структура для хранения данных о продукте
-    struct iovec iov[4]; // массив структур iovec для векторной записи
+void AddEnterprise() {
+    Enterprise tmpEnterprise; // Cтруктура для хранения данных о продукте.
+    struct iovec iov[4]; // Массив структур iovec для векторной записи
+    char fileName[MAX_LEN];
 
-    printf("Введите предприятие-изготовитель: ");
-    scanf("%s", p.manufacturer);
-    printf("Введите тип: ");
-    scanf("%s", p.type);
+    printf("Введите название предприятия-изготовителя: ");
+    scanf("%s", tmpEnterprise.company);
+    printf("Введите тип предприятия: ");
+    scanf("%s", tmpEnterprise.type);
+    getchar();
     printf("Введите цену: ");
-    scanf("%lf", &p.price);
+    tmpEnterprise.price = FloatInput();
     printf("Введите производительность: ");
-    scanf("%lf", &p.performance);
+    tmpEnterprise.performance = FloatInput();
 
-    iov[0].iov_base = p.manufacturer; // указатель на данные о предприятии-изготовителе
+    iov[0].iov_base = tmpEnterprise.company; // указатель на данные о предприятии-изготовителе
     iov[0].iov_len = MAX_LEN; // размер данных о предприятии-изготовителе в байтах
-    iov[1].iov_base = p.type; // указатель на данные о типе
+    iov[1].iov_base = tmpEnterprise.type; // указатель на данные о типе
     iov[1].iov_len = MAX_LEN; // размер данных о типе в байтах
-    iov[2].iov_base = &p.price; // указатель на данные о цене
+    iov[2].iov_base = &tmpEnterprise.price; // указатель на данные о цене
     iov[2].iov_len = sizeof(double); // размер данных о цене в байтах
-    iov[3].iov_base = &p.performance; // указатель на данные о производительности
+    iov[3].iov_base = &tmpEnterprise.performance; // указатель на данные о производительности
     iov[3].iov_len = sizeof(double); // размер данных о производительности в байтах
 
-    int fd = open(FILE_NAME, O_WRONLY | O_APPEND | O_CREAT, 0666); // открыть файл для записи в конец или создать его при необходимости с правами 0666
+    int fileDescriptor = -1;
 
-    if (fd == -1) { // проверить успешность открытия файла
-        perror("Ошибка открытия файла");
-        exit(1);
+    while (fileDescriptor == -1)
+    {
+        printf("Введите имя файла: ");
+        scanf("%s", fileName);
+
+        int len = strlen(fileName); // получить длину имени файла
+        char *ext = fileName + len - 4; // получить указатель на последние четыре символа
+
+        if (strcmp(ext, ".txt") == 0 || strcmp(ext, ".bin") == 0) // сравнить расширение с ".txt" или ".bin"
+        {
+            fileDescriptor = open(fileName, O_WRONLY | O_APPEND
+            | O_CREAT, 0666); // открыть файл для записи в конец или создать его при необходимости с правами 0666
+        }
+        else
+        {
+            printf("Неверное расширение файла! Попробуйте снова\n");
+        }
     }
 
-    if (writev(fd, iov, 4) == -1) { // выполнить векторную запись из массива структур iovec в файл и проверить успешность операции
+    if (writev(fileDescriptor, iov, 4) == -1)
+    { // выполнить векторную запись из массива структур iovec в файл и проверить успешность операции
         perror("Ошибка записи в файл");
         exit(1);
     }
 
-    close(fd); // закрыть файл
+    close(fileDescriptor); // закрыть файл
 
     printf("Запись успешно добавлена.\n");
 }
@@ -202,7 +220,7 @@ void modify_record() {
 
     int fd = open(FILE_NAME, O_RDWR); // открыть файл для чтения и записи
 
-    iov[0].iov_base = p.manufacturer; // указатель на данные о предприятии-изготовителе
+    iov[0].iov_base = p.company; // указатель на данные о предприятии-изготовителе
     iov[0].iov_len = MAX_LEN; // размер данных о предприятии-изготовителе в байтах
     iov[1].iov_base = p.type; // указатель на данные о типе
     iov[1].iov_len = MAX_LEN; // размер данных о типе в байтах
@@ -240,8 +258,8 @@ void modify_record() {
     switch(choice) {
         case 1: // модификация поля предприятие-изготовитель
             printf("Введите новое значение предприятие-изготовитель: ");
-            scanf("%s", p.manufacturer);
-            iov[0].iov_base = p.manufacturer; // указатель на данные о предприятие-изготовителе
+            scanf("%s", p.company);
+            iov[0].iov_base = p.company; // указатель на данные о предприятие-изготовителе
             iov[0].iov_len = MAX_LEN; // размер данных о предприяте-изготовителе в байтах
             break;
         case 2: // модификация поля тип
@@ -264,7 +282,7 @@ void modify_record() {
             break;
         case 5: // модификация всех полей
             printf("Введите новое значение предприятие-изготовитель: ");
-            scanf("%s", p.manufacturer);
+            scanf("%s", p.company);
             printf("Введите новое значение тип: ");
             scanf("%s", p.type);
             printf("Введите новое значение цена: ");
@@ -272,7 +290,7 @@ void modify_record() {
             printf("Введите новое значение производительность: ");
             scanf("%lf", &p.performance);
 
-            iov[0].iov_base = p.manufacturer; // указатель на данные о предприятие-изготовителе
+            iov[0].iov_base = p.company; // указатель на данные о предприятие-изготовителе
             iov[0].iov_len = MAX_LEN; // размер данных о предприяте-изготовителе в байтах
             iov[1].iov_base = p.type; // указатель на данные о типе
             iov[1].iov_len = MAX_LEN; // размер данных о типе в байтах
@@ -396,7 +414,7 @@ void read_record() {
         exit(1);
     }
 
-    iov[0].iov_base = p.manufacturer; // указатель на данные о предприятие-изготовителе
+    iov[0].iov_base = p.company; // указатель на данные о предприятие-изготовителе
     iov[0].iov_len = MAX_LEN; // размер данных о предприяте-изготовителе в байтах
     iov[1].iov_base = p.type; // указатель на данные о типе
     iov[1].iov_len = MAX_LEN; // размер данных о типе в байтах
@@ -412,60 +430,88 @@ void read_record() {
 
     close(fd); // закрыть файл
 
-    printf("Предприятие-изготовитель: %s\n", p.manufacturer);
+    printf("Предприятие-изготовитель: %s\n", p.company);
     printf("Тип: %s\n", p.type);
     printf("Цена: %.2f\n", p.price);
     printf("Производительность: %.2f\n", p.performance);
 }
 
 // функция для вывода всех записей из файла
-void print_all_records() {
-    Enterprise p; // структура для хранения данных о продукте
+void PrintAllRecords() {
+    Enterprise tmpEnterprise; // структура для хранения данных о продукте
     struct iovec iov[4]; // массив структур iovec для векторного чтения
     int count = 0; // счетчик записей
+    int fileDescriptor = -1;
+    char fileName[MAX_LEN];
+    int fileOpen = 0;
 
-    int fd = open(FILE_NAME, O_RDONLY); // открыть файл для чтения
+    while (fileDescriptor == -1)
+    {
+        printf("Введите имя файла (Q - для выхода): ");
+        scanf("%s", fileName);
 
-    if (fd == -1) { // проверить успешность открытия файла
-        perror("Ошибка открытия файла");
-        exit(1);
+        int len = strlen(fileName); // получить длину имени файла
+        char* ext = fileName + len - 4; // получить указатель на последние четыре символа
+
+        if (strcmp(ext, ".txt") == 0 || strcmp(ext, ".bin") == 0) // сравнить расширение с ".txt" или ".bin"
+        {
+            fileDescriptor = open(fileName, O_RDONLY); // открыть файл для чтения
+            if (fileDescriptor == -1)
+            {
+                printf("Такого файла нет! Попробуйте снова.\n");
+            }
+        }
+        else
+        {
+            if (strcmp(fileName, "Q") == 0)
+            {
+                fileOpen = -1;
+                break;
+            }
+            printf("Неверное расширение файла! Попробуйте снова\n");
+        }
     }
 
-    while (1) { // бесконечный цикл
+    if (fileOpen == 0)
+    {
+        while (1) { // бесконечный цикл
 
-        iov[0].iov_base = p.manufacturer; // указатель на данные о предприятие-изготовителе
-        iov[0].iov_len = MAX_LEN; // размер данных о предприяте-изготовителе в байтах
-        iov[1].iov_base = p.type; // указатель на данные о типе
-        iov[1].iov_len = MAX_LEN; // размер данных о типе в байтах
-        iov[2].iov_base = &p.price; // указатель на данные о цене
-        iov[2].iov_len = sizeof(double); // размер данных о цене в байтах
-        iov[3].iov_base = &p.performance; // указатель на данные о производительности
-        iov[3].iov_len = sizeof(double); // размер данных о производительности в байтах
+            iov[0].iov_base = tmpEnterprise.company; // указатель на данные о предприятие-изготовителе
+            iov[0].iov_len = MAX_LEN; // размер данных о предприяте-изготовителе в байтах
+            iov[1].iov_base = tmpEnterprise.type; // указатель на данные о типе
+            iov[1].iov_len = MAX_LEN; // размер данных о типе в байтах
+            iov[2].iov_base = &tmpEnterprise.price; // указатель на данные о цене
+            iov[2].iov_len = sizeof(double); // размер данных о цене в байтах
+            iov[3].iov_base = &tmpEnterprise.performance; // указатель на данные о производительности
+            iov[3].iov_len = sizeof(double); // размер данных о производительности в байтах
 
-        ssize_t bytes_read = readv(fd, iov, 4); // выполнить векторное чтение из файла в массив структур iovec и сохранить количество прочитанных байтов
+            ssize_t bytes_read = readv(fileDescriptor, iov, 4); // выполнить векторное чтение из файла в массив структур iovec и сохранить количество прочитанных байтов
 
-        if (bytes_read == -1) { // проверить успешность операции чтения
-            perror("Ошибка чтения из файла");
-            exit(1);
+            if (bytes_read == -1) { // проверить успешность операции чтения
+                perror("Ошибка чтения из файла");
+                exit(1);
+            }
+
+            if (bytes_read == 0) { // проверить конец файла
+                break;
+            }
+
+            count++; // увеличить счетчик записей
+
+            printf("\n");
+            printf("Предприятие №%d\n", count);
+            printf("Предприятие-изготовитель: %s\n", tmpEnterprise.company);
+            printf("Тип: %s\n", tmpEnterprise.type);
+            printf("Цена: %.2f\n", tmpEnterprise.price);
+            printf("Производительность: %.2f\n", tmpEnterprise.performance);
+            printf("\n");
         }
 
-        if (bytes_read == 0) { // проверить конец файла
-            break;
+        close(fileDescriptor); // закрыть файл
+
+        if (count == 0) { // если счетчик равен нулю, то сообщить об отсутствии записей
+            printf("Файл пуст.\n");
         }
-
-        count++; // увеличить счетчик записей
-        printf("Запись %d:\n", count);
-        printf("Предприятие-изготовитель: %s\n", p.manufacturer);
-        printf("Тип: %s\n", p.type);
-        printf("Цена: %.2f\n", p.price);
-        printf("Производительность: %.2f\n", p.performance);
-
-    }
-
-    close(fd); // закрыть файл
-
-    if (count == 0) { // если счетчик равен нулю, то сообщить об отсутствии записей
-        printf("Файл пуст.\n");
     }
 }
 

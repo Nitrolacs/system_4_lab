@@ -18,10 +18,10 @@ typedef struct Enterprise Enterprise; //!< Структура предприят
  */
 struct Enterprise
 {
-    char manufacturer[MAX_LEN]; /*!< Предприятие изготовитель */
+    char company[MAX_LEN]; /*!< Предприятие изготовитель */
     char type[MAX_LEN]; /*!< Тип */
-    float price; /*!< Цена */
-    float performance; /*!< Производительность */
+    double price; /*!< Цена */
+    double performance; /*!< Производительность */
 };
 
 #endif //INC_4_LAB_STRUCTURE_H
