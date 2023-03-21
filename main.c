@@ -48,7 +48,7 @@ int main()
                 break;
 
             case PRINTING_ONE_ENTERPRISE:
-                read_record();
+                ReadRecord();
                 break;
 
             case PRINTING_ALL_ENTERPRISES:

@@ -19,7 +19,7 @@ long CountRecords(char* fileName);
 
 void delete_record();
 
-void read_record();
+void ReadRecord();
 
 void PrintAllRecords();
 
