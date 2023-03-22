@@ -1,8 +1,9 @@
+/*! Функция интерфейса */
+
 #include <stdio.h>
 
 #include "interface.h"
 
-// функция для вывода меню выбора действия
 void PrintMenu() {
     printf("-------------------\n");
     printf("| Меню программы: |\n");

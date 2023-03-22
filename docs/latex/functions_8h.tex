@@ -1,0 +1,106 @@
+\hypertarget{functions_8h}{}\doxysection{Файл functions.\+h}
+\label{functions_8h}\index{functions.h@{functions.h}}
+
+
+Заголовочный файл с описанием функций  
+
+
+\doxysubsection*{Функции}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{functions_8h_a07291511581ae8c7352600c3af2e1756}{Checking\+Input}} (int lower\+Bound, int count)
+\begin{DoxyCompactList}\small\item\em Считывает из консоли одно целое число \end{DoxyCompactList}\item 
+char $\ast$ \mbox{\hyperlink{functions_8h_a88cb52a97a0ac0ce6741f5651a9492ae}{String\+Input}} (void)
+\begin{DoxyCompactList}\small\item\em Функция ввода строки \end{DoxyCompactList}\item 
+float \mbox{\hyperlink{functions_8h_a353267dea8a89fc556d51baf6cc11880}{Float\+Input}} (void)
+\begin{DoxyCompactList}\small\item\em Функция ввода числа с плавающей точкой \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{functions_8h_a360b9001e74c9e7fa9adc7a12f853325}\label{functions_8h_a360b9001e74c9e7fa9adc7a12f853325}} 
+void {\bfseries Add\+Record} (void)
+\begin{DoxyCompactList}\small\item\em Функция для добавления одной записи в файл \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{functions_8h_a18549431bf70d3e82e88c14ffac34bf9}\label{functions_8h_a18549431bf70d3e82e88c14ffac34bf9}} 
+void {\bfseries Modify\+Record} ()
+\begin{DoxyCompactList}\small\item\em Функция для модификации одной записи в файле по номеру \end{DoxyCompactList}\item 
+long \mbox{\hyperlink{functions_8h_a3199d9f10ee1c16cc0d49885f655892d}{Count\+Records}} (char $\ast$file\+Name)
+\begin{DoxyCompactList}\small\item\em Функция подсчёта количества записей в файле \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{functions_8h_a64cfa321f1fe2fe3f90bb363abb71260}\label{functions_8h_a64cfa321f1fe2fe3f90bb363abb71260}} 
+void {\bfseries Delete\+Record} ()
+\begin{DoxyCompactList}\small\item\em Функция для удаления одной записи из файла по номеру \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{functions_8h_a6097efddd1a2a0bc88855c7d7e15bf4f}\label{functions_8h_a6097efddd1a2a0bc88855c7d7e15bf4f}} 
+void {\bfseries Read\+Record} ()
+\begin{DoxyCompactList}\small\item\em Функция для чтения одной записи из файла по номеру \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{functions_8h_af386db22ffaccf030602ca269cabba4e}\label{functions_8h_af386db22ffaccf030602ca269cabba4e}} 
+void {\bfseries Print\+All\+Records} ()
+\begin{DoxyCompactList}\small\item\em Функция для вывода всех записей из файла \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{functions_8h_a332f0512eb802cd4f5498494ac66de81}\label{functions_8h_a332f0512eb802cd4f5498494ac66de81}} 
+void {\bfseries Find\+Best\+Ratio} ()
+\begin{DoxyCompactList}\small\item\em Функция для нахождения списка предприятий с наилучшим соотношением \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{functions_8h_a2f1713228566c1c7b9b2b592a0fec980}\label{functions_8h_a2f1713228566c1c7b9b2b592a0fec980}} 
+void {\bfseries Find\+Price\+Range} ()
+\begin{DoxyCompactList}\small\item\em Функция для нахождения диапазона цен \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Подробное описание}
+Заголовочный файл с описанием функций 
+
+Данный файл содержит в себе определения основных функций, используемых в программе. 
+
+\doxysubsection{Функции}
+\mbox{\Hypertarget{functions_8h_a07291511581ae8c7352600c3af2e1756}\label{functions_8h_a07291511581ae8c7352600c3af2e1756}} 
+\index{functions.h@{functions.h}!CheckingInput@{CheckingInput}}
+\index{CheckingInput@{CheckingInput}!functions.h@{functions.h}}
+\doxysubsubsection{\texorpdfstring{CheckingInput()}{CheckingInput()}}
+{\footnotesize\ttfamily int Checking\+Input (\begin{DoxyParamCaption}\item[{int}]{lower\+Bound,  }\item[{int}]{count }\end{DoxyParamCaption})}
+
+
+
+Считывает из консоли одно целое число 
+
+
+\begin{DoxyParams}[1]{Аргументы}
+\mbox{\texttt{ in}}  & {\em lower\+Bound} & Нижняя граница чисел \\
+\hline
+\mbox{\texttt{ in}}  & {\em count} & Верхняя граница чисел \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Возвращает}
+Считанное число 
+\end{DoxyReturn}
+\mbox{\Hypertarget{functions_8h_a3199d9f10ee1c16cc0d49885f655892d}\label{functions_8h_a3199d9f10ee1c16cc0d49885f655892d}} 
+\index{functions.h@{functions.h}!CountRecords@{CountRecords}}
+\index{CountRecords@{CountRecords}!functions.h@{functions.h}}
+\doxysubsubsection{\texorpdfstring{CountRecords()}{CountRecords()}}
+{\footnotesize\ttfamily long Count\+Records (\begin{DoxyParamCaption}\item[{char $\ast$}]{file\+Name }\end{DoxyParamCaption})}
+
+
+
+Функция подсчёта количества записей в файле 
+
+\begin{DoxyReturn}{Возвращает}
+Количество записей 
+\end{DoxyReturn}
+\mbox{\Hypertarget{functions_8h_a353267dea8a89fc556d51baf6cc11880}\label{functions_8h_a353267dea8a89fc556d51baf6cc11880}} 
+\index{functions.h@{functions.h}!FloatInput@{FloatInput}}
+\index{FloatInput@{FloatInput}!functions.h@{functions.h}}
+\doxysubsubsection{\texorpdfstring{FloatInput()}{FloatInput()}}
+{\footnotesize\ttfamily float Float\+Input (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Функция ввода числа с плавающей точкой 
+
+\begin{DoxyReturn}{Возвращает}
+Введённое пользователем число 
+\end{DoxyReturn}
+\mbox{\Hypertarget{functions_8h_a88cb52a97a0ac0ce6741f5651a9492ae}\label{functions_8h_a88cb52a97a0ac0ce6741f5651a9492ae}} 
+\index{functions.h@{functions.h}!StringInput@{StringInput}}
+\index{StringInput@{StringInput}!functions.h@{functions.h}}
+\doxysubsubsection{\texorpdfstring{StringInput()}{StringInput()}}
+{\footnotesize\ttfamily char $\ast$ String\+Input (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Функция ввода строки 
+
+\begin{DoxyReturn}{Возвращает}
+Введённая пользователем строка 
+\end{DoxyReturn}
